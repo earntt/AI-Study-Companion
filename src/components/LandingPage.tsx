@@ -2,12 +2,33 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Upload, FileText, Brain, Zap, Clock, Target } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { useEffect, useState } from 'react';
 
 interface LandingPageProps {
   onNavigate: (page: string) => void;
 }
 
+const images = [
+  'https://images.unsplash.com/photo-1599488059966-a42a2ab36991?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170',
+  'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170',
+  'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170',
+];
+
 export function LandingPage({ onNavigate }: LandingPageProps) {
+  const [currentImage, setCurrentImage] = useState(images[0]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => {
+        const currentIndex = images.indexOf(prev);
+        const nextIndex = (currentIndex + 1) % images.length;
+        return images[nextIndex];
+      });
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -48,7 +69,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="relative">
             <div className="rounded-2xl overflow-hidden shadow-2xl">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1704748082614-8163a88e56b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5JTIwc3R1ZGVudCUyMGxhcHRvcCUyMHN0dWR5aW5nfGVufDF8fHx8MTc1OTgyMTk4N3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                src={currentImage}
                 alt="Student studying with laptop"
                 className="w-full h-auto"
               />
